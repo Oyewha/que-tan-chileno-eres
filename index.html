@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>¿Qué tan Chileno Eres? 🇨🇱 — El Desafío Criollo</title>
+
+  <!-- Meta-etiquetas Open Graph para que Facebook arme una tarjeta atractiva al compartir el link -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="¿Qué tan Chileno Eres? 🇨🇱 — Desafío Oficial" />
+  <meta property="og:description" content="Responde 8 preguntas rápidas de modismos, comida y cultura pop antes que se acabe el tiempo. ¿Eres Prócer de la Patria o Turista en Estación Central?" />
+  <meta property="og:url" content="https://oyewha.github.io/que-tan-chileno-eres/" />
+
+  <style>
+    :root {
+      --bg-dark: #07080c;
+      --card-bg: #11131c;
+      --card-border: #23283a;
+      --chile-red: #e60026;
+      --chile-red-dark: #990019;
+      --chile-blue: #0039a6;
+      --chile-white: #f8fafc;
+      --accent-green: #00ff88;
+      --accent-gold: #fbbf24;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: radial-gradient(circle at top, #181c2e 0%, #07080c 70%);
+      color: var(--chile-white);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 14px;
+      overflow-y: auto;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 440px;
+      margin: auto;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-top: 4px solid var(--chile-red);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+      text-align: center;
+      position: relative;
+    }
+
+    .tricolor-strip {
+      display: flex;
+      height: 5px;
+      width: 100%;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .strip-blue { flex: 1; background: var(--chile-blue); }
+    .strip-white { flex: 1; background: var(--chile-white); }
+    .strip-red { flex: 2; background: var(--chile-red); }
+
+    .player-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #171b26;
+      padding: 9px 12px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      border: 1px solid #262c3f;
+    }
+
+    .player-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .player-avatar {
+      width: 38px;
+      height: 38px;
+      min-width: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--chile-blue), var(--chile-red));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      border: 2px solid #2e364f;
+    }
+
+    .player-name {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .badge-mode {
+      font-size: 0.68rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(0, 255, 136, 0.12);
+      color: var(--accent-green);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(230, 0, 38, 0.15);
+      border: 1px solid rgba(230, 0, 38, 0.4);
+      color: #ff4d6d;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 99px;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: 1.7rem;
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 8px;
+      color: #ffffff;
+    }
+
+    .subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .name-input-group {
+      margin-bottom: 14px;
+      text-align: left;
+    }
+
+    .name-input-group label {
+      display: block;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .name-input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #2e364f;
+      background: #171c2b;
+      color: #ffffff;
+      font-size: 0.96rem;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .name-input:focus {
+      border-color: var(--chile-red);
+    }
+
+    .hud {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      gap: 6px;
+    }
+
+    .hud-pill {
+      background: #1c2233;
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 1px solid #2e364f;
+    }
+
+    .hud-score-pill { color: var(--accent-green); }
+    .hud-timer-pill { color: #fbbf24; }
+
+    .timer-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: #1b2030;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .timer-bar-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, var(--chile-blue), var(--chile-red));
+      transition: width 0.1s linear;
+    }
+
+    .question-box {
+      background: #161a26;
+      border: 1px solid #283047;
+      border-radius: 14px;
+      padding: 18px 14px;
+      margin-bottom: 16px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.4;
+      min-height: 105px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+      user-select: none;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 13px 15px;
+      border-radius: 12px;
+      border: 1px solid #2a324a;
+      background: #191f2e;
+      color: #f8fafc;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.1s ease, background 0.15s ease, border-color 0.15s ease;
+      user-select: none;
+    }
+
+    .btn:active { transform: scale(0.97); }
+    .btn:hover { background: #222a3d; border-color: #475569; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--chile-red), var(--chile-red-dark));
+      border: 1px solid #ff3355;
+      color: #ffffff;
+      font-size: 1.02rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      box-shadow: 0 8px 24px rgba(230, 0, 38, 0.4);
+    }
+
+    .btn-primary:hover { filter: brightness(1.1); }
+
+    .share-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin-top: 4px;
+    }
+
+    .btn-fb {
+      background: linear-gradient(135deg, #1877f2, #0d5bd3);
+      border: 1px solid #4599ff;
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 800;
+      box-shadow: 0 6px 20px rgba(24, 119, 242, 0.35);
+    }
+
+    .btn-whatsapp {
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      border: 1px solid #22c55e;
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 800;
+      box-shadow: 0 6px 20px rgba(22, 163, 74, 0.35);
+    }
+
+    .btn-card {
+      background: linear-gradient(135deg, #9333ea, #6b21a8);
+      border: 1px solid #b975f9;
+      color: #ffffff;
+      font-size: 0.92rem;
+      font-weight: 800;
+    }
+
+    .btn-secondary {
+      background: #1a2030;
+      border-color: #2f3852;
+    }
+
+    .rank-card {
+      background: #161b29;
+      border: 1px solid #2d3652;
+      border-radius: 14px;
+      padding: 14px;
+      margin: 12px 0;
+    }
+
+    .rank-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .rank-title {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #ff4d6d;
+      margin-bottom: 4px;
+    }
+
+    .rank-desc {
+      font-size: 0.84rem;
+      color: #cbd5e1;
+      line-height: 1.35;
+    }
+
+    .score-final {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--accent-green);
+      line-height: 1.1;
+      margin: 4px 0;
+    }
+
+    .record-badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+
+    .leaderboard-box {
+      background: #141824;
+      border: 1px solid #262e45;
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 14px;
+      margin-bottom: 14px;
+      text-align: left;
+    }
+
+    .lb-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #232a3d;
+    }
+
+    .lb-title {
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--accent-gold);
+    }
+
+    .lb-subtitle {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .lb-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .lb-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1a2030;
+      padding: 7px 10px;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      font-size: 0.84rem;
+    }
+
+    .lb-row.is-me {
+      background: rgba(0, 255, 136, 0.08);
+      border-color: rgba(0, 255, 136, 0.35);
+    }
+
+    .lb-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow: hidden;
+    }
+
+    .lb-pos {
+      width: 22px;
+      font-weight: 800;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 0.85rem;
+    }
+
+    .lb-avatar {
+      width: 26px;
+      height: 26px;
+      min-width: 26px;
+      border-radius: 50%;
+      background: #283149;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .lb-name {
+      font-weight: 600;
+      color: #e2e8f0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 175px;
+    }
+
+    .lb-score {
+      font-weight: 800;
+      color: var(--accent-green);
+      font-size: 0.84rem;
+      white-space: nowrap;
+    }
+
+    .toast-banner {
+      margin-top: 12px;
+      background: rgba(0, 255, 136, 0.12);
+      border: 1px solid rgba(0, 255, 136, 0.4);
+      color: #a7f3d0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.8rem;
+      line-height: 1.35;
+      text-align: left;
+    }
+
+    .btn.correct {
+      background: #059669 !important;
+      border-color: #10b981 !important;
+      color: #ffffff !important;
+    }
+
+    .btn.wrong {
+      background: #991b1b !important;
+      border-color: #ef4444 !important;
+      color: #ffffff !important;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <div class="tricolor-strip">
+      <div class="strip-blue"></div>
+      <div class="strip-white"></div>
+      <div class="strip-red"></div>
+    </div>
+
+    <!-- Barra del jugador -->
+    <div class="player-bar">
+      <div class="player-info">
+        <div class="player-avatar" id="player-avatar">CL</div>
+        <span class="player-name" id="player-name-display">Jugador Chileno</span>
+      </div>
+      <span class="badge-mode">EDICIÓN WEB 🇨🇱</span>
+    </div>
+
+    <!-- PANTALLA DE INICIO -->
+    <div id="screen-start">
+      <div class="hero-badge">Desafío Nacional 🇨🇱</div>
+      <h1>¿QUÉ TAN CHILENO ERES?</h1>
+      <p class="subtitle">8 preguntas rápidas de modismos, comida y cultura pop. Tienes 15 segundos por pregunta para demostrar si tenís calle.</p>
+
+      <div class="name-input-group">
+        <label for="player-name-input">Tu nombre o apodo para el ranking:</label>
+        <input type="text" id="player-name-input" class="name-input" maxlength="24" placeholder="Ej: Walther / El Tío Aceite..." />
+      </div>
+
+      <button class="btn btn-primary" onclick="startGame()">¡EMPEZAR AL TIRO!</button>
+
+      <!-- Ranking Top 5 -->
+      <div class="leaderboard-box">
+        <div class="lb-header">
+          <span class="lb-title">🏆 Tabla de Posiciones Top 5</span>
+          <span class="lb-subtitle">Desafío Criollo</span>
+        </div>
+        <div class="lb-list" id="leaderboard-start"></div>
+      </div>
+    </div>
+
+    <!-- PANTALLA DE JUEGO -->
+    <div id="screen-game" class="hidden">
+      <div class="hud">
+        <span id="hud-progress">Pregunta 1/8</span>
+        <span class="hud-pill hud-timer-pill" id="hud-timer">⏱️ 15s</span>
+        <span class="hud-pill hud-score-pill" id="hud-score">0 pts</span>
+      </div>
+      <div class="timer-bar-bg">
+        <div class="timer-bar-fill" id="timer-bar"></div>
+      </div>
+      <div class="question-box" id="question-text">...</div>
+      <div class="options-grid" id="options-container"></div>
+    </div>
+
+    <!-- PANTALLA DE RESULTADOS -->
+    <div id="screen-end" class="hidden">
+      <div class="hero-badge">Veredicto Final</div>
+      <div class="score-final" id="final-score">0 pts</div>
+      <div class="record-badge" id="record-text">Récord personal: 0 pts</div>
+
+      <div class="rank-card">
+        <div class="rank-label">Tu Nivel de Chilenidad</div>
+        <div class="rank-title" id="rank-title">...</div>
+        <div class="rank-desc" id="rank-desc">...</div>
+      </div>
+
+      <!-- Ranking Actualizado -->
+      <div class="leaderboard-box">
+        <div class="lb-header">
+          <span class="lb-title">🏆 Tabla Top 5</span>
+          <span class="lb-subtitle">En vivo</span>
+        </div>
+        <div class="lb-list" id="leaderboard-end"></div>
+      </div>
+
+      <div class="share-actions">
+        <button class="btn btn-fb" onclick="shareToFacebook()">📘 COMPARTIR EN MI MURO DE FACEBOOK</button>
+        <button class="btn btn-whatsapp" onclick="shareToWhatsApp()">💬 RETAR POR WHATSAPP / CHAT</button>
+        <button class="btn btn-card" onclick="downloadScoreCard()">🖼️ DESCARGAR TARJETA CON MI PUNTAJE</button>
+        <button class="btn btn-secondary" onclick="startGame()">JUGAR DE NUEVO</button>
+      </div>
+
+      <div class="toast-banner hidden" id="share-toast"></div>
+    </div>
+  </div>
+
+  <script>
+    const QUESTIONS_PER_ROUND = 8;
+    const SECONDS_PER_QUESTION = 15;
+
+    const QUESTION_BANK = [
+      {
+        q: "¿Cuál es el orden sagrado de ingredientes de un Completo Italiano?",
+        options: ["Palta, tomate, mayo", "Tomate, palta, mayo", "Mayo, tomate, palta", "Tomate, mayo, chucrut"],
+        answer: 1
+      },
+      {
+        q: "Si un amigo te dice que 'anda pato', ¿qué le pasa?",
+        options: ["Está muy resfriado", "Anda sin ni uno (sin plata)", "Está enojado con todo el mundo", "Anda con ropa nueva"],
+        answer: 1
+      },
+      {
+        q: "¿Qué expresión clásica aparece en Condorito cuando alguien se cae o pasa vergüenza?",
+        options: ["¡CHANFLE!", "¡PLOP!", "¡RAYOS!", "¡CÁSPITA!"],
+        answer: 1
+      },
+      {
+        q: "En 31 Minutos, ¿cómo se llama el conductor estrella del noticiero?",
+        options: ["Juan Carlos Bodoque", "Policarpo Avendaño", "Tulio Triviño", "Calcetín con Rombos Man"],
+        answer: 2
+      },
+      {
+        q: "Si alguien 'se pegó el alcachofazo', ¿qué acaba de hacer?",
+        options: ["Se comió una ensalada", "Se cayó en la calle", "Por fin se dio cuenta de algo", "Se quedó dormido en la micro"],
+        answer: 2
+      },
+      {
+        q: "Si pides un 'Ave Palta' en una fuente de soda chilena, ¿qué te traen?",
+        options: ["Sándwich de pollo desmenuzado con palta", "Una ensalada César con palta", "Un completo con pollo", "Una empanada de ave"],
+        answer: 0
+      },
+      {
+        q: "¿Qué significa cuando un chileno dice que algo está 'filete'?",
+        options: ["Que es muy caro", "Que está muy bueno o de excelente calidad", "Que es un corte de carne cruda", "Que está aburrido"],
+        answer: 1
+      },
+      {
+        q: "¿Cómo se le dice popularmente en Chile a la resaca después de un carrete?",
+        options: ["Chuchaqui", "Caña", "Cruda", "Goma"],
+        answer: 1
+      },
+      {
+        q: "Si te dicen 'ya po, no te pongai cuático', ¿qué te están pidiendo?",
+        options: ["Que hables más rápido", "Que no exageres ni te pongas grave", "Que invites a comer", "Que te vayas para la casa"],
+        answer: 1
+      },
+      {
+        q: "¿Cuál es el baile nacional oficial de Chile?",
+        options: ["La Cumbia", "El Trote Nortino", "La Cueca", "La Guaracha"],
+        answer: 2
+      },
+      {
+        q: "¿Qué significa 'ir al choque' en buen chileno?",
+        options: ["Ir a ver los autos chocadores", "Enfrentar un problema o persona de frente sin miedo", "Ir a comprar pan", "Arrancar de una pelea"],
+        answer: 1
+      },
+      {
+        q: "Cuando empieza a correr viento helado en la tarde y dicen 'se puso helado Juan', ¿qué toca hacer?",
+        options: ["Ir a la playa", "Entrar a tomar once con pan amasado", "Prender el aire acondicionado", "Salir a trotar"],
+        answer: 1
+      },
+      {
+        q: "¿Qué bebida gaseosa chilena es famosa por su sabor dulce y color amarillo intenso?",
+        options: ["Bilz", "Pap", "Kem Xtreme", "Cachantún"],
+        answer: 1
+      },
+      {
+        q: "Si alguien te dice 'te pasaste tres pueblos', ¿qué significa?",
+        options: ["Que te quedaste dormido en el bus", "Que exageraste mucho o te fuiste al chancho", "Que caminaste demasiado", "Que llegaste muy temprano"],
+        answer: 1
+      },
+      {
+        q: "¿Qué es una 'marraqueta' en Chile?",
+        options: ["Un tipo de baile", "El pan batido/francés crujiente de cuatro dientes", "Una empanada frita", "Un postre de leche"],
+        answer: 1
+      },
+      {
+        q: "Cuando un partido de fútbol en Chile termina con un gol agónico al último minuto, ¿cómo se celebra?",
+        options: ["Con un aplauso formal", "Gritando ¡GOOOL CONCHETUMARE! / ¡VAMOS CHILE!", "Tocando la campana", "En silencio"],
+        answer: 1
+      }
+    ];
+
+    let playerName = localStorage.getItem("cl_web_player_name") || "";
+    let currentRoundQuestions = [];
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let correctCount = 0;
+    let bestScore = Number(localStorage.getItem("cl_web_best_score") || 0);
+    let timerInterval = null;
+    let totalTicks = SECONDS_PER_QUESTION * 10;
+    let ticksLeft = totalTicks;
+    let isLocked = false;
+    let lastRank = { title: "", desc: "" };
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playTone(freq, type, duration) {
+      try {
+        if (audioCtx.state === "suspended") audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    window.onload = function () {
+      const inputEl = document.getElementById("player-name-input");
+      if (playerName) {
+        inputEl.value = playerName;
+        updateHeaderName(playerName);
+      }
+      inputEl.addEventListener("input", () => {
+        const val = inputEl.value.trim();
+        updateHeaderName(val || "Jugador Chileno");
+      });
+      renderLeaderboard();
+    };
+
+    function updateHeaderName(name) {
+      document.getElementById("player-name-display").textContent = name;
+      const initials = name.substring(0, 2).toUpperCase();
+      document.getElementById("player-avatar").textContent = initials || "CL";
+    }
+
+    function getDefaultLeaderboard() {
+      const saved = localStorage.getItem("cl_web_leaderboard");
+      if (saved) return JSON.parse(saved);
+      return [
+        { id: "bot_1", name: "Tulio Triviño", score: 1480 },
+        { id: "bot_2", name: "El Tío Aceite", score: 1320 },
+        { id: "bot_3", name: "Juan Carlos Bodoque", score: 1150 },
+        { id: "bot_4", name: "Condorito Pelotillehue", score: 940 },
+        { id: "bot_5", name: "Patana Tufillo", score: 780 }
+      ];
+    }
+
+    function updateLeaderboardWithScore(newScore) {
+      let list = getDefaultLeaderboard();
+      const idx = list.findIndex(item => item.id === "me");
+      if (idx !== -1) {
+        list[idx].name = playerName;
+        if (newScore > list[idx].score) list[idx].score = newScore;
+      } else {
+        list.push({ id: "me", name: playerName, score: newScore });
+      }
+      list.sort((a, b) => b.score - a.score);
+      list = list.slice(0, 5);
+      localStorage.setItem("cl_web_leaderboard", JSON.stringify(list));
+      renderLeaderboard();
+    }
+
+    function renderLeaderboard() {
+      const list = getDefaultLeaderboard()
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 5);
+
+      const html = list.map((entry, idx) => {
+        const rank = idx + 1;
+        const isMe = entry.id === "me";
+        let medal = `${rank}.`;
+        if (rank === 1) medal = "🥇";
+        else if (rank === 2) medal = "🥈";
+        else if (rank === 3) medal = "🥉";
+
+        const initials = entry.name.substring(0, 2).toUpperCase();
+        return `
+          <div class="lb-row ${isMe ? "is-me" : ""}">
+            <div class="lb-left">
+              <span class="lb-pos">${medal}</span>
+              <div class="lb-avatar">${initials}</div>
+              <span class="lb-name">${escapeHtml(entry.name)} ${isMe ? "(Tú)" : ""}</span>
+            </div>
+            <span class="lb-score">${entry.score} pts</span>
+          </div>
+        `;
+      }).join("");
+
+      document.getElementById("leaderboard-start").innerHTML = html;
+      document.getElementById("leaderboard-end").innerHTML = html;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function startGame() {
+      const inputVal = document.getElementById("player-name-input").value.trim();
+      playerName = inputVal || "Jugador Chileno";
+      localStorage.setItem("cl_web_player_name", playerName);
+      updateHeaderName(playerName);
+
+      currentRoundQuestions = shuffleArray(QUESTION_BANK).slice(0, QUESTIONS_PER_ROUND);
+      currentQuestionIndex = 0;
+      score = 0;
+      correctCount = 0;
+
+      document.getElementById("share-toast").classList.add("hidden");
+      document.getElementById("screen-start").classList.add("hidden");
+      document.getElementById("screen-end").classList.add("hidden");
+      document.getElementById("screen-game").classList.remove("hidden");
+      playTone(520, "sine", 0.12);
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      isLocked = false;
+      clearInterval(timerInterval);
+
+      if (currentQuestionIndex >= currentRoundQuestions.length) {
+        endGame();
+        return;
+      }
+
+      const item = currentRoundQuestions[currentQuestionIndex];
+      document.getElementById("hud-progress").textContent = `Pregunta ${currentQuestionIndex + 1}/${QUESTIONS_PER_ROUND}`;
+      document.getElementById("hud-score").textContent = `${score} pts`;
+      document.getElementById("question-text").textContent = item.q;
+
+      const optionsContainer = document.getElementById("options-container");
+      optionsContainer.innerHTML = "";
+
+      item.options.forEach((optText, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "btn";
+        btn.textContent = optText;
+        btn.onclick = () => selectAnswer(idx, btn);
+        optionsContainer.appendChild(btn);
+      });
+
+      totalTicks = SECONDS_PER_QUESTION * 10;
+      ticksLeft = totalTicks;
+      const bar = document.getElementById("timer-bar");
+      const timerLabel = document.getElementById("hud-timer");
+      bar.style.width = "100%";
+      timerLabel.textContent = `⏱️ ${SECONDS_PER_QUESTION}s`;
+
+      timerInterval = setInterval(() => {
+        ticksLeft -= 1;
+        const pct = Math.max(0, (ticksLeft / totalTicks) * 100);
+        const secsRemaining = Math.ceil(ticksLeft / 10);
+        bar.style.width = `${pct}%`;
+        timerLabel.textContent = `⏱️ ${secsRemaining}s`;
+
+        if (ticksLeft <= 0) {
+          clearInterval(timerInterval);
+          handleTimeout();
+        }
+      }, 100);
+    }
+
+    function selectAnswer(selectedIndex, btnElement) {
+      if (isLocked) return;
+      isLocked = true;
+      clearInterval(timerInterval);
+
+      const item = currentRoundQuestions[currentQuestionIndex];
+      const allButtons = document.querySelectorAll("#options-container .btn");
+
+      if (selectedIndex === item.answer) {
+        btnElement.classList.add("correct");
+        playTone(740, "triangle", 0.18);
+        correctCount++;
+        const speedBonus = Math.max(10, Math.round((ticksLeft / totalTicks) * 100));
+        score += 100 + speedBonus;
+      } else {
+        btnElement.classList.add("wrong");
+        allButtons[item.answer].classList.add("correct");
+        playTone(190, "sawtooth", 0.25);
+      }
+
+      document.getElementById("hud-score").textContent = `${score} pts`;
+
+      setTimeout(() => {
+        currentQuestionIndex++;
+        loadQuestion();
+      }, 1050);
+    }
+
+    function handleTimeout() {
+      if (isLocked) return;
+      isLocked = true;
+      playTone(180, "sawtooth", 0.25);
+      const item = currentRoundQuestions[currentQuestionIndex];
+      const allButtons = document.querySelectorAll("#options-container .btn");
+      allButtons[item.answer].classList.add("correct");
+
+      setTimeout(() => {
+        currentQuestionIndex++;
+        loadQuestion();
+      }, 1050);
+    }
+
+    function getChileanRank(correct, total) {
+      const ratio = correct / total;
+      if (ratio === 1) {
+        return {
+          title: "PRÓCER DE LA PATRIA 🇨🇱🔥",
+          desc: "8 de 8 al hilo. Tenís sangre de empanada de pino y te sabís todas las picadas."
+        };
+      } else if (ratio >= 0.75) {
+        return {
+          title: "CHILENO DE TOMO Y LOMO",
+          desc: "Impecable. Pasaste la prueba con distinción, listoco pal 18 y pa la once."
+        };
+      } else if (ratio >= 0.5) {
+        return {
+          title: "CHILENO A MEDIAS",
+          desc: "Sabís defenderte, pero parece que a veces le echai mayo antes que la palta."
+        };
+      } else {
+        return {
+          title: "TURISTA EN ESTACIÓN CENTRAL",
+          desc: "Te falta calle, compadre. A repasar los capítulos de 31 Minutos urgente."
+        };
+      }
+    }
+
+    function endGame() {
+      document.getElementById("screen-game").classList.add("hidden");
+      document.getElementById("screen-end").classList.remove("hidden");
+      document.getElementById("final-score").textContent = `${score} pts`;
+
+      lastRank = getChileanRank(correctCount, QUESTIONS_PER_ROUND);
+      document.getElementById("rank-title").textContent = lastRank.title;
+      document.getElementById("rank-desc").textContent = lastRank.desc;
+
+      if (score > bestScore) {
+        bestScore = score;
+        localStorage.setItem("cl_web_best_score", bestScore);
+      }
+
+      document.getElementById("record-text").textContent = `Récord personal: ${bestScore} pts (${correctCount}/${QUESTIONS_PER_ROUND} correctas)`;
+      updateLeaderboardWithScore(score);
+    }
+
+    // --- COMPARTIR REAL EN FACEBOOK Y REDES ---
+    function getShareMessage() {
+      const gameUrl = window.location.href;
+      return `${playerName} sacó ${score} pts (${lastRank.title}) en ¿Qué tan Chileno Eres? 🇨🇱 ¿Le ganai? Juega aquí 👉 ${gameUrl}`;
+    }
+
+    function shareToFacebook() {
+      const gameUrl = encodeURIComponent(window.location.href);
+      const quote = encodeURIComponent(`${playerName} sacó ${score} pts (${lastRank.title}) en ¿Qué tan Chileno Eres? 🇨🇱 ¿Cuánto sacai tú?`);
+      const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${gameUrl}&quote=${quote}`;
+
+      // Copia también el texto por si el usuario quiere pegarlo en el comentario del post
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(getShareMessage()).catch(() => {});
+      }
+
+      window.open(fbShareUrl, "_blank", "width=600,height=500");
+
+      const toast = document.getElementById("share-toast");
+      toast.innerHTML = `✅ <b>¡Ventana de Facebook abierta!</b> También copiamos tu mensaje con puntaje al portapapeles por si quieres pegarlo en tu publicación.`;
+      toast.classList.remove("hidden");
+    }
+
+    function shareToWhatsApp() {
+      const msg = encodeURIComponent(getShareMessage());
+      window.open(`https://api.whatsapp.com/send?text=${msg}`, "_blank");
+    }
+
+    function downloadScoreCard() {
+      const canvas = document.createElement("canvas");
+      canvas.width = 600;
+      canvas.height = 315;
+      const ctx = canvas.getContext("2d");
+
+      ctx.fillStyle = "#07080c";
+      ctx.fillRect(0, 0, 600, 315);
+
+      ctx.fillStyle = "#0039a6";
+      ctx.fillRect(0, 0, 150, 14);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(150, 0, 150, 14);
+      ctx.fillStyle = "#e60026";
+      ctx.fillRect(300, 0, 300, 14);
+
+      ctx.strokeStyle = "#e60026";
+      ctx.lineWidth = 6;
+      ctx.strokeRect(10, 20, 580, 285);
+
+      ctx.fillStyle = "#94a3b8";
+      ctx.font = "bold 20px sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(playerName.toUpperCase(), 300, 58);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 26px sans-serif";
+      ctx.fillText("¿QUÉ TAN CHILENO ERES?", 300, 92);
+
+      ctx.fillStyle = "#00ff88";
+      ctx.font = "bold 64px sans-serif";
+      ctx.fillText(`${score} PTS`, 300, 165);
+
+      ctx.fillStyle = "#ff4d6d";
+      ctx.font = "bold 23px sans-serif";
+      ctx.fillText(lastRank.title, 300, 218);
+
+      ctx.fillStyle = "#cbd5e1";
+      ctx.font = "19px sans-serif";
+      ctx.fillText("¡A ver si superai este récord en Facebook!", 300, 268);
+
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/png");
+      link.download = `desafio-chileno-${score}pts.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      const toast = document.getElementById("share-toast");
+      toast.innerHTML = `🖼️ <b>¡Tarjeta descargada!</b> Súbela directo a tu muro o historia de Facebook para picar a tus amigos.`;
+      toast.classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
