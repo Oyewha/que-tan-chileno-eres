@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>¿Qué tan Chileno Eres? 🇨🇱 — El Desafío Criollo</title>
+  <title>¿Qué tan Chileno Eres? 🇨🇱 — Desafío Oficial</title>
 
-  <!-- Meta-etiquetas Open Graph para que Facebook arme una tarjeta atractiva al compartir el link -->
+  <!-- Vista previa llamativa para Facebook y WhatsApp -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="¿Qué tan Chileno Eres? 🇨🇱 — Desafío Oficial" />
-  <meta property="og:description" content="Responde 8 preguntas rápidas de modismos, comida y cultura pop antes que se acabe el tiempo. ¿Eres Prócer de la Patria o Turista en Estación Central?" />
+  <meta property="og:title" content="¿Qué tan Chileno Eres? 🇨🇱 — ¿Eres Prócer o Turista?" />
+  <meta property="og:description" content="Responde 8 preguntas rápidas de modismos, comida y cultura pop antes que se acabe el tiempo y métete al Top 10 de Chile." />
   <meta property="og:url" content="https://oyewha.github.io/que-tan-chileno-eres/" />
+  <meta property="og:image" content="https://oyewha.github.io/que-tan-chileno-eres/portada.png" />
 
   <style>
     :root {
@@ -100,7 +101,14 @@
       justify-content: center;
       font-weight: 800;
       font-size: 0.85rem;
+      overflow: hidden;
       border: 2px solid #2e364f;
+    }
+
+    .player-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .player-name {
@@ -149,41 +157,57 @@
     .subtitle {
       font-size: 0.88rem;
       color: var(--text-muted);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       line-height: 1.4;
     }
 
-    .name-input-group {
+    .auth-box {
+      background: #161b29;
+      border: 1px solid #283047;
+      border-radius: 14px;
+      padding: 12px;
       margin-bottom: 14px;
-      text-align: left;
     }
 
-    .name-input-group label {
-      display: block;
-      font-size: 0.76rem;
-      font-weight: 700;
-      color: #cbd5e1;
-      margin-bottom: 6px;
+    .btn-fb-login {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: 1px solid #4599ff;
+      background: #1877f2;
+      color: #ffffff;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-fb-login:hover { background: #166fe5; }
+
+    .divider-text {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin: 9px 0;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
     .name-input {
       width: 100%;
-      padding: 12px 14px;
-      border-radius: 12px;
+      padding: 11px 13px;
+      border-radius: 10px;
       border: 1px solid #2e364f;
-      background: #171c2b;
+      background: #0f131f;
       color: #ffffff;
-      font-size: 0.96rem;
+      font-size: 0.94rem;
       font-weight: 600;
       outline: none;
-      transition: border-color 0.2s;
     }
 
-    .name-input:focus {
-      border-color: var(--chile-red);
-    }
+    .name-input:focus { border-color: var(--chile-red); }
 
     .hud {
       display: flex;
@@ -255,7 +279,7 @@
       font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
-      transition: transform 0.1s ease, background 0.15s ease, border-color 0.15s ease;
+      transition: transform 0.1s ease, background 0.15s ease;
       user-select: none;
     }
 
@@ -271,8 +295,6 @@
       letter-spacing: 0.5px;
       box-shadow: 0 8px 24px rgba(230, 0, 38, 0.4);
     }
-
-    .btn-primary:hover { filter: brightness(1.1); }
 
     .share-actions {
       display: flex;
@@ -297,14 +319,6 @@
       font-size: 0.95rem;
       font-weight: 800;
       box-shadow: 0 6px 20px rgba(22, 163, 74, 0.35);
-    }
-
-    .btn-card {
-      background: linear-gradient(135deg, #9333ea, #6b21a8);
-      border: 1px solid #b975f9;
-      color: #ffffff;
-      font-size: 0.92rem;
-      font-weight: 800;
     }
 
     .btn-secondary {
@@ -436,6 +450,13 @@
       justify-content: center;
       font-size: 0.7rem;
       font-weight: 700;
+      overflow: hidden;
+    }
+
+    .lb-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .lb-name {
@@ -452,6 +473,13 @@
       color: var(--accent-green);
       font-size: 0.84rem;
       white-space: nowrap;
+    }
+
+    .lb-empty {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 10px 0;
     }
 
     .toast-banner {
@@ -483,6 +511,8 @@
 </head>
 <body>
 
+  <div id="fb-root"></div>
+
   <div class="app-container">
     <div class="tricolor-strip">
       <div class="strip-blue"></div>
@@ -496,29 +526,34 @@
         <div class="player-avatar" id="player-avatar">CL</div>
         <span class="player-name" id="player-name-display">Jugador Chileno</span>
       </div>
-      <span class="badge-mode">EDICIÓN WEB 🇨🇱</span>
+      <span class="badge-mode" id="db-status-badge">TOP 10 LIVE 🇨🇱</span>
     </div>
 
     <!-- PANTALLA DE INICIO -->
     <div id="screen-start">
       <div class="hero-badge">Desafío Nacional 🇨🇱</div>
       <h1>¿QUÉ TAN CHILENO ERES?</h1>
-      <p class="subtitle">8 preguntas rápidas de modismos, comida y cultura pop. Tienes 15 segundos por pregunta para demostrar si tenís calle.</p>
+      <p class="subtitle">8 preguntas rápidas de modismos, comida y cultura pop. Conéctate con Facebook o escribe tu apodo para entrar al ranking nacional.</p>
 
-      <div class="name-input-group">
-        <label for="player-name-input">Tu nombre o apodo para el ranking:</label>
-        <input type="text" id="player-name-input" class="name-input" maxlength="24" placeholder="Ej: Walther / El Tío Aceite..." />
+      <div class="auth-box" id="auth-box">
+        <button class="btn-fb-login" onclick="loginWithFacebook()">
+          <span>📘</span> ENTRAR CON FACEBOOK (FOTO Y NOMBRE REAL)
+        </button>
+        <div class="divider-text">— o juega rápido con un apodo —</div>
+        <input type="text" id="player-name-input" class="name-input" maxlength="24" placeholder="Escribe tu nombre o apodo..." />
       </div>
 
       <button class="btn btn-primary" onclick="startGame()">¡EMPEZAR AL TIRO!</button>
 
-      <!-- Ranking Top 5 -->
+      <!-- Ranking Top 10 Global -->
       <div class="leaderboard-box">
         <div class="lb-header">
-          <span class="lb-title">🏆 Tabla de Posiciones Top 5</span>
-          <span class="lb-subtitle">Desafío Criollo</span>
+          <span class="lb-title">🏆 Ranking Global Top 10</span>
+          <span class="lb-subtitle" id="lb-source-label">Cargando...</span>
         </div>
-        <div class="lb-list" id="leaderboard-start"></div>
+        <div class="lb-list" id="leaderboard-start">
+          <div class="lb-empty">Cargando puntajes en vivo...</div>
+        </div>
       </div>
     </div>
 
@@ -551,16 +586,17 @@
       <!-- Ranking Actualizado -->
       <div class="leaderboard-box">
         <div class="lb-header">
-          <span class="lb-title">🏆 Tabla Top 5</span>
+          <span class="lb-title">🏆 Tabla Global Top 10</span>
           <span class="lb-subtitle">En vivo</span>
         </div>
-        <div class="lb-list" id="leaderboard-end"></div>
+        <div class="lb-list" id="leaderboard-end">
+          <div class="lb-empty">Guardando tu puntaje...</div>
+        </div>
       </div>
 
       <div class="share-actions">
-        <button class="btn btn-fb" onclick="shareToFacebook()">📘 COMPARTIR EN MI MURO DE FACEBOOK</button>
-        <button class="btn btn-whatsapp" onclick="shareToWhatsApp()">💬 RETAR POR WHATSAPP / CHAT</button>
-        <button class="btn btn-card" onclick="downloadScoreCard()">🖼️ DESCARGAR TARJETA CON MI PUNTAJE</button>
+        <button class="btn btn-fb" onclick="shareScoreCardDirect()">🔥 COMPARTIR TARJETA CON MI PUNTAJE</button>
+        <button class="btn btn-whatsapp" onclick="shareToWhatsApp()">💬 RETAR POR WHATSAPP</button>
         <button class="btn btn-secondary" onclick="startGame()">JUGAR DE NUEVO</button>
       </div>
 
@@ -568,7 +604,13 @@
     </div>
   </div>
 
+  <!-- SDK Web oficial de Facebook Login -->
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/es_LA/sdk.js"></script>
+
   <script>
+    const FIREBASE_DB_URL = "https://quiz-chileno-default-rtdb.firebaseio.com";
+    const FB_APP_ID = "1153551307169637";
+
     const QUESTIONS_PER_ROUND = 8;
     const SECONDS_PER_QUESTION = 15;
 
@@ -649,13 +691,22 @@
         answer: 1
       },
       {
-        q: "Cuando un partido de fútbol en Chile termina con un gol agónico al último minuto, ¿cómo se celebra?",
-        options: ["Con un aplauso formal", "Gritando ¡GOOOL CONCHETUMARE! / ¡VAMOS CHILE!", "Tocando la campana", "En silencio"],
+        q: "Si alguien 'se fue al chancho' con el precio de algo, ¿qué hizo?",
+        options: ["Lo dejó muy barato", "Cobró demasiado caro / se excedió", "Lo regaló", "Lo cambió por comida"],
         answer: 1
       }
     ];
 
+    let playerId = localStorage.getItem("cl_uid");
+    if (!playerId) {
+      playerId = "user_" + Math.random().toString(36).substring(2, 11);
+      localStorage.setItem("cl_uid", playerId);
+    }
+
     let playerName = localStorage.getItem("cl_web_player_name") || "";
+    let playerPhoto = localStorage.getItem("cl_web_player_photo") || "";
+    let isFbConnected = false;
+
     let currentRoundQuestions = [];
     let currentQuestionIndex = 0;
     let score = 0;
@@ -684,80 +735,188 @@
       } catch (e) {}
     }
 
-    window.onload = function () {
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: FB_APP_ID,
+        cookie: true,
+        xfbml: false,
+        version: "v21.0"
+      });
+
+      FB.getLoginStatus(function (response) {
+        if (response.status === "connected") {
+          fetchFacebookProfile();
+        }
+      });
+    };
+
+    function loginWithFacebook() {
+      if (typeof FB === "undefined") {
+        alert("El SDK de Facebook aún está cargando o está bloqueado por el navegador.");
+        return;
+      }
+      FB.login(function (response) {
+        if (response.authResponse) {
+          fetchFacebookProfile();
+        }
+      }, { scope: "public_profile" });
+    }
+
+    function fetchFacebookProfile() {
+      FB.api("/me", { fields: "id,name,picture.type(large)" }, function (profile) {
+        if (profile && !profile.error) {
+          isFbConnected = true;
+          playerId = "fb_" + profile.id;
+          playerName = profile.name;
+          playerPhoto = profile.picture && profile.picture.data ? profile.picture.data.url : "";
+
+          localStorage.setItem("cl_uid", playerId);
+          localStorage.setItem("cl_web_player_name", playerName);
+          localStorage.setItem("cl_web_player_photo", playerPhoto);
+
+          updatePlayerHeader();
+          document.getElementById("auth-box").innerHTML = `
+            <div style="font-size:0.86rem; color:#00ff88; font-weight:700;">
+              ✅ Conectado como ${escapeHtml(playerName)}
+            </div>
+          `;
+        }
+      });
+    }
+
+    function updatePlayerHeader() {
+      const display = playerName || "Jugador Chileno";
+      document.getElementById("player-name-display").textContent = display;
+      const avatarEl = document.getElementById("player-avatar");
+      if (playerPhoto) {
+        avatarEl.innerHTML = `<img src="${playerPhoto}" alt="Foto">`;
+      } else {
+        avatarEl.textContent = display.substring(0, 2).toUpperCase() || "CL";
+      }
+    }
+
+    window.onload = async function () {
       const inputEl = document.getElementById("player-name-input");
       if (playerName) {
         inputEl.value = playerName;
-        updateHeaderName(playerName);
+        updatePlayerHeader();
       }
       inputEl.addEventListener("input", () => {
-        const val = inputEl.value.trim();
-        updateHeaderName(val || "Jugador Chileno");
+        if (!isFbConnected) {
+          playerName = inputEl.value.trim();
+          updatePlayerHeader();
+        }
       });
-      renderLeaderboard();
+
+      await loadGlobalLeaderboard();
     };
 
-    function updateHeaderName(name) {
-      document.getElementById("player-name-display").textContent = name;
-      const initials = name.substring(0, 2).toUpperCase();
-      document.getElementById("player-avatar").textContent = initials || "CL";
+    async function loadGlobalLeaderboard() {
+      try {
+        const res = await fetch(`${FIREBASE_DB_URL}/scores.json`);
+        const data = await res.json();
+        document.getElementById("lb-source-label").textContent = "En vivo (Chile)";
+
+        if (!data) {
+          renderLeaderboardList([]);
+          return;
+        }
+
+        const list = Object.keys(data)
+          .map(key => ({ id: key, ...data[key] }))
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 10);
+
+        renderLeaderboardList(list);
+      } catch (err) {
+        document.getElementById("lb-source-label").textContent = "Modo Local";
+        renderLocalLeaderboard();
+      }
     }
 
-    function getDefaultLeaderboard() {
-      const saved = localStorage.getItem("cl_web_leaderboard");
-      if (saved) return JSON.parse(saved);
-      return [
-        { id: "bot_1", name: "Tulio Triviño", score: 1480 },
-        { id: "bot_2", name: "El Tío Aceite", score: 1320 },
-        { id: "bot_3", name: "Juan Carlos Bodoque", score: 1150 },
-        { id: "bot_4", name: "Condorito Pelotillehue", score: 940 },
-        { id: "bot_5", name: "Patana Tufillo", score: 780 }
-      ];
+    async function saveScoreToGlobalLeaderboard(newScore) {
+      try {
+        const prevRes = await fetch(`${FIREBASE_DB_URL}/scores/${playerId}.json`);
+        const prevData = await prevRes.json();
+
+        const finalBest = prevData && prevData.score > newScore ? prevData.score : newScore;
+
+        await fetch(`${FIREBASE_DB_URL}/scores/${playerId}.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: playerName,
+            photo: playerPhoto || "",
+            score: finalBest,
+            updatedAt: Date.now()
+          })
+        });
+
+        await loadGlobalLeaderboard();
+      } catch (err) {
+        saveLocalScore(newScore);
+      }
     }
 
-    function updateLeaderboardWithScore(newScore) {
-      let list = getDefaultLeaderboard();
-      const idx = list.findIndex(item => item.id === "me");
+    function saveLocalScore(newScore) {
+      let list = JSON.parse(localStorage.getItem("cl_local_top10") || "[]");
+      const idx = list.findIndex(item => item.id === playerId);
       if (idx !== -1) {
         list[idx].name = playerName;
+        list[idx].photo = playerPhoto;
         if (newScore > list[idx].score) list[idx].score = newScore;
       } else {
-        list.push({ id: "me", name: playerName, score: newScore });
+        list.push({ id: playerId, name: playerName, photo: playerPhoto, score: newScore });
       }
       list.sort((a, b) => b.score - a.score);
-      list = list.slice(0, 5);
-      localStorage.setItem("cl_web_leaderboard", JSON.stringify(list));
-      renderLeaderboard();
+      list = list.slice(0, 10);
+      localStorage.setItem("cl_local_top10", JSON.stringify(list));
+      renderLeaderboardList(list);
     }
 
-    function renderLeaderboard() {
-      const list = getDefaultLeaderboard()
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 5);
+    function renderLocalLeaderboard() {
+      const list = JSON.parse(localStorage.getItem("cl_local_top10") || "[]");
+      renderLeaderboardList(list);
+    }
+
+    function renderLeaderboardList(list) {
+      const containers = [
+        document.getElementById("leaderboard-start"),
+        document.getElementById("leaderboard-end")
+      ];
+
+      if (!list || list.length === 0) {
+        const emptyHtml = `<div class="lb-empty">Sé el primero en inaugurar el Top 10 de Chile 🇨🇱</div>`;
+        containers.forEach(c => (c.innerHTML = emptyHtml));
+        return;
+      }
 
       const html = list.map((entry, idx) => {
         const rank = idx + 1;
-        const isMe = entry.id === "me";
+        const isMe = entry.id === playerId;
         let medal = `${rank}.`;
         if (rank === 1) medal = "🥇";
         else if (rank === 2) medal = "🥈";
         else if (rank === 3) medal = "🥉";
 
-        const initials = entry.name.substring(0, 2).toUpperCase();
+        const initials = (entry.name || "CL").substring(0, 2).toUpperCase();
+        const avatarHtml = entry.photo
+          ? `<img src="${entry.photo}" alt="Avatar">`
+          : initials;
+
         return `
           <div class="lb-row ${isMe ? "is-me" : ""}">
             <div class="lb-left">
               <span class="lb-pos">${medal}</span>
-              <div class="lb-avatar">${initials}</div>
-              <span class="lb-name">${escapeHtml(entry.name)} ${isMe ? "(Tú)" : ""}</span>
+              <div class="lb-avatar">${avatarHtml}</div>
+              <span class="lb-name">${escapeHtml(entry.name || "Jugador")} ${isMe ? "(Tú)" : ""}</span>
             </div>
             <span class="lb-score">${entry.score} pts</span>
           </div>
         `;
       }).join("");
 
-      document.getElementById("leaderboard-start").innerHTML = html;
-      document.getElementById("leaderboard-end").innerHTML = html;
+      containers.forEach(c => (c.innerHTML = html));
     }
 
     function escapeHtml(text) {
@@ -776,10 +935,13 @@
     }
 
     function startGame() {
-      const inputVal = document.getElementById("player-name-input").value.trim();
-      playerName = inputVal || "Jugador Chileno";
-      localStorage.setItem("cl_web_player_name", playerName);
-      updateHeaderName(playerName);
+      if (!isFbConnected) {
+        const inputEl = document.getElementById("player-name-input");
+        const val = inputEl ? inputEl.value.trim() : "";
+        playerName = val || playerName || "Jugador Chileno";
+        localStorage.setItem("cl_web_player_name", playerName);
+        updatePlayerHeader();
+      }
 
       currentRoundQuestions = shuffleArray(QUESTION_BANK).slice(0, QUESTIONS_PER_ROUND);
       currentQuestionIndex = 0;
@@ -907,7 +1069,7 @@
       }
     }
 
-    function endGame() {
+    async function endGame() {
       document.getElementById("screen-game").classList.add("hidden");
       document.getElementById("screen-end").classList.remove("hidden");
       document.getElementById("final-score").textContent = `${score} pts`;
@@ -922,38 +1084,10 @@
       }
 
       document.getElementById("record-text").textContent = `Récord personal: ${bestScore} pts (${correctCount}/${QUESTIONS_PER_ROUND} correctas)`;
-      updateLeaderboardWithScore(score);
+      await saveScoreToGlobalLeaderboard(score);
     }
 
-    // --- COMPARTIR REAL EN FACEBOOK Y REDES ---
-    function getShareMessage() {
-      const gameUrl = window.location.href;
-      return `${playerName} sacó ${score} pts (${lastRank.title}) en ¿Qué tan Chileno Eres? 🇨🇱 ¿Le ganai? Juega aquí 👉 ${gameUrl}`;
-    }
-
-    function shareToFacebook() {
-      const gameUrl = encodeURIComponent(window.location.href);
-      const quote = encodeURIComponent(`${playerName} sacó ${score} pts (${lastRank.title}) en ¿Qué tan Chileno Eres? 🇨🇱 ¿Cuánto sacai tú?`);
-      const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${gameUrl}&quote=${quote}`;
-
-      // Copia también el texto por si el usuario quiere pegarlo en el comentario del post
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(getShareMessage()).catch(() => {});
-      }
-
-      window.open(fbShareUrl, "_blank", "width=600,height=500");
-
-      const toast = document.getElementById("share-toast");
-      toast.innerHTML = `✅ <b>¡Ventana de Facebook abierta!</b> También copiamos tu mensaje con puntaje al portapapeles por si quieres pegarlo en tu publicación.`;
-      toast.classList.remove("hidden");
-    }
-
-    function shareToWhatsApp() {
-      const msg = encodeURIComponent(getShareMessage());
-      window.open(`https://api.whatsapp.com/send?text=${msg}`, "_blank");
-    }
-
-    function downloadScoreCard() {
+    function buildScoreCardCanvas() {
       const canvas = document.createElement("canvas");
       canvas.width = 600;
       canvas.height = 315;
@@ -994,16 +1128,48 @@
       ctx.font = "19px sans-serif";
       ctx.fillText("¡A ver si superai este récord en Facebook!", 300, 268);
 
-      const link = document.createElement("a");
-      link.href = canvas.toDataURL("image/png");
-      link.download = `desafio-chileno-${score}pts.png`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      return canvas;
+    }
+
+    async function shareScoreCardDirect() {
+      const gameUrl = window.location.href;
+      const shareText = `${playerName} sacó ${score} pts (${lastRank.title}) en ¿Qué tan Chileno Eres? 🇨🇱 ¿Le ganai? Juega aquí 👉 ${gameUrl}`;
+      const canvas = buildScoreCardCanvas();
+
+      if (navigator.canShare && navigator.share) {
+        try {
+          const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+          const file = new File([blob], `desafio-chileno-${score}pts.png`, { type: "image/png" });
+
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: "¿Qué tan Chileno Eres? 🇨🇱",
+              text: shareText
+            });
+            return;
+          }
+        } catch (err) {
+          if (err.name === "AbortError") return;
+        }
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareText).catch(() => {});
+      }
+
+      const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(gameUrl)}&quote=${encodeURIComponent(shareText)}`;
+      window.open(fbUrl, "_blank", "width=600,height=500");
 
       const toast = document.getElementById("share-toast");
-      toast.innerHTML = `🖼️ <b>¡Tarjeta descargada!</b> Súbela directo a tu muro o historia de Facebook para picar a tus amigos.`;
+      toast.innerHTML = `✅ <b>¡Ventana de Facebook abierta!</b> Tu mensaje con récord ya está copiado en el portapapeles para llegar y pegarlo.`;
       toast.classList.remove("hidden");
+    }
+
+    function shareToWhatsApp() {
+      const gameUrl = window.location.href;
+      const msg = encodeURIComponent(`${playerName} sacó ${score} pts (${lastRank.title}) en ¿Qué tan Chileno Eres? 🇨🇱 ¿Le ganai? Juega aquí 👉 ${gameUrl}`);
+      window.open(`https://api.whatsapp.com/send?text=${msg}`, "_blank");
     }
   </script>
 </body>
